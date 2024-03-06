@@ -74,12 +74,16 @@ export async function POST(req: Request) {
 
     if (eventType === 'user.deleted') {
         try {
-            const { id } = evt?.data
-            await deleteUser(id)
-            return new Response('User is Deleted', { status: 200 })
+            const id = evt?.data?.id;
+            if (!id) {
+                console.error('No user ID found in webhook event');
+                return new Response('Error occured', { status: 400 });
+            }
+            await deleteUser(id);
+            return new Response('User is Deleted', { status: 200 });
         } catch (err) {
             console.error('Error deleting user', err);
-            return new Response('Error occured', { status: 500 })
+            return new Response('Error occured', { status: 500 });
         }
     }
 }
