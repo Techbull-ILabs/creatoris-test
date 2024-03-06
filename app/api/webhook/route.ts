@@ -48,11 +48,8 @@ export async function POST(req: Request) {
         })
     }
 
-    // Get the ID and type
-    const { id } = evt.data;
-    const eventType = evt.type;
-    console.log(`Webhook with and ID of ${id} and type of ${eventType}`)
-    console.log('Webhook body:', body)
+    const eventType = evt?.type;
+
 
     if (eventType === 'user.created' || eventType === 'user.updated')
     {
