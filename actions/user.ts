@@ -1,7 +1,7 @@
 import User, { IUser } from "@/models/User";
 import { connectToDB } from "@/lib/mongodb/mongoose";
 
-export const createOrUpdateUser = async (id: string, email_address: string): Promise<IUser | null> => {
+export const createOrUpdateUser = async (id: string, email_addresses: string): Promise<IUser | null> => {
     try {
         await connectToDB();
 
@@ -9,7 +9,7 @@ export const createOrUpdateUser = async (id: string, email_address: string): Pro
             { clerkId: id },
             {
                 $set: {
-                    email: email_address
+                    email: email_addresses
                 }
             },
             { upsert: true, new: true } // if user does not exist, create a new one

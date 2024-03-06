@@ -56,10 +56,10 @@ export async function POST(req: Request) {
 
     if (eventType === 'user.created' || eventType === 'user.updated')
     {
-        const { id, email_address } = evt?.data
+        const { id, email_addresses } = evt?.data
 
         try {
-            await createOrUpdateUser(id, email_address)
+            await createOrUpdateUser(id, email_addresses)
             return new Response('User is created or updated', { status: 200 })
         } catch (err) {
             console.error('Error Creating new User', err);
