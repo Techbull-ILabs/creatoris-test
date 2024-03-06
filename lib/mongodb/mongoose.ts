@@ -11,17 +11,19 @@ export const connectToDB = async () => {
     }
 
     try {
-        await mongoose.connect(process.env.MONGODB_URI, {
+        const mongodbUri = process.env.MONGODB_URI;
+        if (!mongodbUri) {
+            throw new Error('MONGODB_URI environment variable is not defined');
+        }
+        await mongoose.connect(mongodbUri, {
             dbName: "CreatorisLab",
             useNewUrlParser: true,
             useUnifiedTopology: true,
         });
-
         isConnected = true;
-
         console.log("MongoDb is connected");
-    }
-    catch (error) {
+    } catch (error) {
         console.log(error);
     }
+
 };
