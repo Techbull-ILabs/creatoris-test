@@ -51,18 +51,26 @@ export async function POST(req: Request) {
     const eventType = evt?.type;
 
 
-    if (eventType === 'user.created' || eventType === 'user.updated')
-    {
-        const { id, email_addresses } = evt?.data
+    if (eventType === 'user.created' || eventType === 'user.updated') {
+        const { id, email_addresses } = evt?.data;
+
+        // Extract the email address from the array of objects
+        const email = email_addresses[0]?.email_address;
+
+        if (!email) {
+            console.error('No email address found in webhook event');
+            return new Response('Error occured', { status: 400 });
+        }
 
         try {
-            await createOrUpdateUser(id, email_addresses)
-            return new Response('User is created or updated', { status: 200 })
+            await createOrUpdateUser(id, email);
+            return new Response('User is created or updated', { status: 200 });
         } catch (err) {
             console.error('Error Creating new User', err);
-            return new Response('Error occured', { status: 500 })
+            return new Response('Error occured', { status: 500 });
         }
     }
+
 
     if (eventType === 'user.deleted') {
         try {
